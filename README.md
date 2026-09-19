@@ -1,7 +1,7 @@
 # <div align="center">📄➕ Round Review Plugins</div>
 
 <div align="center">
-Round Review is a PDF platform to manage documents and reviews with collaborators.<br>
+<a href="https://github.com/Maxelweb/RoundReview">Round Review</a> is a PDF platform to manage documents and reviews with collaborators.<br>
 This is a mono-repository that contains <strong>plugins</strong> for the platform working via REST API and WEBHOOKS.
 </div>
 
