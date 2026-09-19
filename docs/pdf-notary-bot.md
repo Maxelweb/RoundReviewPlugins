@@ -3,7 +3,7 @@
 
 The PDF Notary Bot is a Round Review plugin to sign PDF with a custom certificate whenever a document gets approved. This will generated a signed version of the PDF that can be downloaded from the document review page of the application.
 
-![pdf-notary-bot-plugin](docs/images/pdf-notary-bot.jpg)
+![pdf-notary-bot-plugin](./images/pdf-notary-bot.jpg)
 
 ## First installation (via CLI)
 
