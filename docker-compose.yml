@@ -15,7 +15,7 @@ services:
       # NOTE: Update this path according to the location of your certificates
       - ./certs:/certs
     env_file:
-      - ./envs/rr-pdf-notary-bot.env
+      - ./envs/pdf-notary-bot.env
 
   roundreview_example_bot:
     container_name: "roundreview_example_bot"
@@ -26,5 +26,18 @@ services:
     environment:
       - DEBUG=1
 
+  roundreview_ai_reviewer_bot:
+    container_name: "roundreview_ai_reviewer_bot"
+    build: ./plugins/ai-reviewer-bot
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    volumes:
+      - rr_ai_reviewer_data:/data
+      # - ./plugins/ai-reviewer-bot:/app
+    env_file:
+      - ./envs/ai-reviewer-bot.env
+
 volumes:
   rr_signed_pdfs:
+  rr_ai_reviewer_data:
