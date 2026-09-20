@@ -19,6 +19,19 @@ The example bot plugin is a boilerplate to get started with Round Review integra
 
 - See [Docs and first installation](docs/example-bot.md)
 
+## AI Reviewer Bot
+
+The AI Reviewer Bot extracts text from PDFs when they enter `Pending Review`, sends it to an Ollama or OpenAI-compatible API, and publishes the model response as an integration review. It includes a password-protected dashboard for LLM status and system prompt configuration.
+
+- See [Docs and first installation](docs/ai-reviewer-bot.md)
+
+Quick start:
+
+1. `cp envs/template.ai-reviewer-bot.env envs/ai-reviewer-bot.env`
+2. Configure `API_KEY`, `LLM_BASE_URL`, `LLM_MODEL`, and `DASHBOARD_PASSWORD`.
+3. `docker compose up roundreview_ai_reviewer_bot -d --build`
+4. Set the RoundReview webhook URL to `http://<bot-host>:8083/webhook`.
+
 # Docker stack management
 
 1. `docker-compose up -d`: Start all containers in the stack
