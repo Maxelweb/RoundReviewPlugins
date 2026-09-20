@@ -30,20 +30,22 @@ review_jobs_lock = threading.Lock()
 
 
 def _headers() -> dict:
-    headers = {"x-api-key": API_KEY}
+    """ Headers for AI service call """
+    headers = {"x-api-key": LLM_API_KEY}
     if LLM_API_KEY:
         headers["Authorization"] = f"Bearer {LLM_API_KEY}"
     return headers
 
 
 def _api_headers() -> dict:
+    """ Headers for Round Review APIs """
     return {"x-api-key": API_KEY}
 
 
 def _api_type() -> str:
     if LLM_API_TYPE in {"ollama", "openai"}:
         return LLM_API_TYPE
-    return "ollama" if LLM_BASE_URL.endswith(":11434") else "openai"
+    return "ollama" if LLM_BASE_URL.endswith(":11434") or "ollama.com" in LLM_BASE_URL else "openai"
 
 
 def llm_health() -> tuple[bool, str]:
@@ -97,7 +99,10 @@ def _call_llm(document_text: str) -> str:
             ],
         }
         response = requests.post(
-            f"{LLM_BASE_URL}/api/chat", json=payload, timeout=LLM_TIMEOUT_SECONDS
+            f"{LLM_BASE_URL}/api/chat",
+            headers={**_headers(), "Content-Type": "application/json"},
+            json=payload, 
+            timeout=LLM_TIMEOUT_SECONDS
         )
         response.raise_for_status()
         return response.json()["message"]["content"]
