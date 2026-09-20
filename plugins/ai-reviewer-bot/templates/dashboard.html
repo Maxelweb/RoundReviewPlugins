@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AI Reviewer Bot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+  <h1>Round Review - AI Reviewer Bot</h1>
+  {% if login %}
+    <form method="post">
+        <label for="password">Password</label> 
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Sign in</button>
+    </form>
+  {% elif unavailable %}
+    <p>AI service is <span class="error strong">not connected</span>: {{ unavailable }}</p>
+    <form method="post" action="{{ url_for('core.dashboard_logout') }}">
+      <button type="submit">Log out</button>
+    </form>
+  {% else %}
+    <form method="post" action="{{ url_for('core.dashboard_logout') }}">
+      <button type="submit">Logout</button>
+    </form>
+    <h2>Configuration</h2>
+    <p>AI service is <span class="success strong">connected</span> with <strong>{{ ai_type }} compatible APIs</strong> at <code>{{ ai_url }}</code></p>
+    <p>AI model: <code>{{ ai_model }}</code></p>
+    <h2>Settings</h2>
+    <form method="post">
+      <label for="system_prompt">System prompt</label>
+      <textarea id="system_prompt" name="system_prompt" required>{{ system_prompt }}</textarea>
+      <button type="submit">Save prompt</button>
+    </form>
+  {% endif %}
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <footer>
+    Developed for <a href="https://github.com/Maxelweb/RoundReview" target="_blank">Round Review</a> by Maxelweb for anyone! &raquo; <code>{{ plugin_info[0] }}</code> (v{{ plugin_info[1] }})
+  </footer>
+</body>
+</html>
