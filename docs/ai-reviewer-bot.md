@@ -64,7 +64,7 @@ For Ollama, make sure the configured model has already been pulled, for example 
 
 ## Dashboard and system prompt
 
-The dashboard requires `DASHBOARD_PASSWORD`. After login, it displays the system prompt editor only when the LLM health check succeeds. The prompt is saved to `/data/system_prompt.txt`, which is persisted by the `rr_ai_reviewer_data` Docker volume.
+The dashboard requires `DASHBOARD_PASSWORD`. After login, it displays the system prompt editor only when the LLM health check succeeds. The prompt is saved to `/data/system_prompt.txt`, which is persisted by the `rr_ai_reviewer_data` Docker volume. When a prompt has been saved from the dashboard, it has priority over `SYSTEM_PROMPT` from the environment and remains active after container restarts.
 
 Set `DASHBOARD_SECRET_KEY` to a long random value in production. If it is empty, the application falls back to `DASHBOARD_PASSWORD` for Flask session signing.
 

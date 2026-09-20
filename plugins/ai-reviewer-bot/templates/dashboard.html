@@ -8,7 +8,7 @@
 <body>
   <h1>Round Review - AI Reviewer Bot</h1>
   {% if login %}
-    <form method="post">
+    <form method="post" action="{{ url_for('core.dashboard_login') }}">
         <label for="password">Password</label> 
         <input type="password" id="password" name="password" required>
         <button type="submit">Sign in</button>
@@ -16,7 +16,7 @@
   {% elif unavailable %}
     <p>AI service is <span class="error strong">not connected</span>: {{ unavailable }}</p>
     <form method="post" action="{{ url_for('core.dashboard_logout') }}">
-      <button type="submit">Log out</button>
+      <button type="submit">Logout</button>
     </form>
   {% else %}
     <form method="post" action="{{ url_for('core.dashboard_logout') }}">
@@ -27,11 +27,16 @@
     <p>AI model: <code>{{ ai_model }}</code></p>
     <h2>Settings</h2>
     <form method="post">
-      <label for="system_prompt">System prompt</label>
+      <label for="system_prompt">System prompt for Reviews</label>
+      <p class="muted">Change this prompt based on what you want your AI model to review. The document will be passed as context.</p>
+    {% if system_prompt_saved %}
+        <p class="info"><strong>Note</strong>: the system prompt saved here has priority over <code>SYSTEM_PROMPT</code> environment variable.</p>
+    {% endif %}
       <textarea id="system_prompt" name="system_prompt" required>{{ system_prompt }}</textarea>
       <button type="submit">Save prompt</button>
     </form>
   {% endif %}
+
   {% if error %}<p class="error">{{ error }}</p>{% endif %}
 
   <footer>

@@ -39,6 +39,14 @@ button {
     margin: 0.5rem 0;
 }
 
+.info {
+    color: rgb(151, 151, 238);
+}
+
+.muted {
+    color: #999;
+}
+
 .error {
     color: rgb(230, 68, 68);
 }

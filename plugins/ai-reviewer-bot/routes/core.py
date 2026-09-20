@@ -67,6 +67,10 @@ def get_system_prompt() -> str:
         return SYSTEM_PROMPT
 
 
+def has_saved_system_prompt() -> bool:
+    return os.path.isfile(SYSTEM_PROMPT_FILE)
+
+
 def save_system_prompt(prompt: str) -> None:
     parent = os.path.dirname(SYSTEM_PROMPT_FILE)
     if parent:
@@ -224,19 +228,24 @@ def dashboard_logout():
     return redirect(url_for("core.dashboard"))
 
 
+@core_blueprint.post("/dashboard/login")
+def dashboard_login():
+    if request.form.get("password", "") != DASHBOARD_PASSWORD:
+        return render_template(
+            "dashboard.html",
+            plugin_info=(PLUGIN_NAME, PLUGIN_VERSION),
+            login=True,
+            error="Invalid password",
+        ), 401
+    session["dashboard_authenticated"] = True
+    return redirect(url_for("core.dashboard"))
+
+
 @core_blueprint.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if not DASHBOARD_PASSWORD:
         return "DASHBOARD_PASSWORD is not configured", 503
     template_context = {"plugin_info": (PLUGIN_NAME, PLUGIN_VERSION)}
-    if request.method == "POST":
-        if request.form.get("password", "") == DASHBOARD_PASSWORD:
-            session["dashboard_authenticated"] = True
-            return redirect(url_for("core.dashboard"))
-        else:
-            return render_template(
-                "dashboard.html", **template_context, error="Invalid password"
-            ), 401
     if not session.get("dashboard_authenticated"):
         return render_template("dashboard.html", **template_context, login=True)
 
@@ -256,4 +265,5 @@ def dashboard():
         ai_type=_api_type(),
         ai_url=LLM_BASE_URL,
         system_prompt=get_system_prompt(),
+        system_prompt_saved=has_saved_system_prompt(),
     )
