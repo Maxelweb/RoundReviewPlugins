@@ -12,7 +12,7 @@ The PDF Notary Bot is a Round Review plugin to sign PDF with a custom certificat
 1. Generate a new SSL certificate: 
     - `openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout key.pem -out cert.pem`
 1. Prepare the environment variables file
-    - `cd .. && cp envs/template.rr-pdf-notary-bot.env envs/rr-pdf-notary-bot.env`
+    - `cd .. && cp envs/template.pdf-notary-bot.env envs/rr-pdf-notary-bot.env`
 1. Edit the environment file according to your needs (see below)
 1. Start the container:
     - `docker-compose up roundreview_pdf_notary_bot -d --build`
@@ -27,22 +27,33 @@ The PDF Notary Bot is a Round Review plugin to sign PDF with a custom certificat
 
 ## Environment Variables
 
-> [!NOTE]
-> Copy the environment file inside `envs/template.rr-pdf-notary-bot.env` and create `envs/rr-pdf-notary-bot.env`
+The template file is the main reference for local configuration. The sections below group the variables by purpose and match the active template in [envs/template.pdf-notary-bot.env](../envs/template.pdf-notary-bot.env).
 
-| Variable name | Description | Default | Required to change |
+### RoundReview API Settings
+
+| Variable name | Description | Template/default value | Required to change |
 |---|---|---|---|
-| `API_KEY` | API key of a RoundReview user (used to authenticate plugin calls to the app) | None | Yes — required for operation; keep it secret |
-| `API_BASE_URL` | RoundReview application API endpoint the plugin calls | "http://roundreview_app:8080/api" | Yes — set to your app's reachable API URL (internally via Docker or externally) |
-| `PLUGIN_BASE_URL` | Public/base URL where the plugin is served; it is used to create the URL in the reviews. | "http://localhost:8081" | Yes - change this to the reachable base url + port (no forward slash) |
-| `PLUGIN_KEY_PASSPHRASE` | Passphrase for the plugin private key (if any) | None | No - if your key certificate is NOT encrypted; keep it secret |
-| `PLUGIN_KEY_PATH` | Filesystem path to private key used for signing | /certs/key.pem | No — ensure path matches your container/host path |
-| `PLUGIN_CERT_PATH` | Filesystem path to certificate used for signing | /certs/cert.pem | No — ensure path matches your container/host path |
-| `PLUGIN_SIGN_IMAGE_PATH` | Optional image used to stamp signed PDFs | None | No — set if you want a visible signature image and change it according to your container/host path (e.g. `/certs/sign.png`) |
-| `PLUGIN_SIGNED_PDFS_FOLDER` | Folder where signed PDFs are stored | /signed_pdfs | No — change it according to your container/host path |
-| `PLUGIN_IS_BEHIND_PROXY` | Plugin is hosted behind proxy (passing `x-forwarded-*`) | False | No — change it according to your configuration |
-| `PLUGIN_BASE_URL_PREFIX` | Plugin base URL prefix for APIs (must start with `/`) | `/` | No — change it according to your configuration (useful if put under a path (e.g. `mywebsite.ltd/notary-bot`)) |
-| `DEBUG` | Enable debug logging and development mode for the plugin | None (unset) | No — let empty in production and `1` or `True` in development |
+| `API_KEY` | API key of a RoundReview user used by the plugin | Empty | Yes |
+| `API_BASE_URL` | RoundReview application API endpoint | `http://roundreview_app:8080/api` | Yes, for custom deployments |
+| `PLUGIN_BASE_URL` | Public/base URL where the plugin is served and used in generated review links | `http://localhost:8081` | Yes |
+| `PLUGIN_BASE_URL_PREFIX` | Optional prefix for the plugin behind a reverse proxy | Empty | No |
+| `PLUGIN_IS_BEHIND_PROXY` | Enables proxy-aware handling for `x-forwarded-*` headers | Empty | No |
+
+### Signing certificate and file settings
+
+| Variable name | Description | Template/default value | Required to change |
+|---|---|---|---|
+| `PLUGIN_KEY_PASSPHRASE` | Passphrase for the plugin private key, if encrypted | Empty | No |
+| `PLUGIN_KEY_PATH` | Filesystem path to the private key used for signing | `/certs/key.pem` | No |
+| `PLUGIN_CERT_PATH` | Filesystem path to the certificate used for signing | `/certs/cert.pem` | No |
+| `PLUGIN_SIGN_IMAGE_PATH` | Optional image used to stamp signed PDFs | Empty | No |
+| `PLUGIN_SIGNED_PDFS_FOLDER` | Folder where signed PDFs are stored | `/signed_pdfs` | No |
+
+### Debug settings
+
+| Variable name | Description | Template/default value | Required to change |
+|---|---|---|---|
+| `DEBUG` | Enable debug logging and development mode for the plugin | Empty | No |
 
 ## Extras
 
