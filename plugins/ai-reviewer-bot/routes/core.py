@@ -11,6 +11,7 @@ from config import (
     API_BASE_URL,
     API_KEY,
     DASHBOARD_PASSWORD,
+    DASHBOARD_ENABLED,
     LLM_API_KEY,
     LLM_API_TYPE,
     LLM_BASE_URL,
@@ -165,7 +166,7 @@ def _create_review(project_id: str, object_id: str) -> str | None:
         headers={**_api_headers(), "Content-Type": "application/json"},
         json={
             "name": PLUGIN_NAME,
-            "value": "Bot is starting reviewing the document. Updates will be published here",
+            "value": "Bot is starting reviewing the document. Updates will be published here once the review is completed...",
             "icon": "robot",
         },
         timeout=30,
@@ -229,12 +230,16 @@ def handle_webhook():
 
 @core_blueprint.post("/dashboard/logout")
 def dashboard_logout():
+    if not DASHBOARD_ENABLED:
+        return "Dashboard is not enabled", 404
     session.pop("dashboard_authenticated", None)
     return redirect(url_for("core.dashboard"))
 
 
 @core_blueprint.post("/dashboard/login")
 def dashboard_login():
+    if not DASHBOARD_ENABLED:
+        return "Dashboard is not enabled", 404
     if request.form.get("password", "") != DASHBOARD_PASSWORD:
         return render_template(
             "dashboard.html",
@@ -248,6 +253,8 @@ def dashboard_login():
 
 @core_blueprint.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+    if not DASHBOARD_ENABLED:
+        return "Dashboard is not enabled", 404
     if not DASHBOARD_PASSWORD:
         return "DASHBOARD_PASSWORD is not configured", 503
     template_context = {"plugin_info": (PLUGIN_NAME, PLUGIN_VERSION)}

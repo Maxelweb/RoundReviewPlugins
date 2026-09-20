@@ -13,11 +13,12 @@ PLUGIN_BASE_URL_PREFIX = os.environ.get("PLUGIN_BASE_URL_PREFIX", "").rstrip("/"
 
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL", "http://ollama:11434").rstrip("/")
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "")
-LLM_MODEL = os.environ.get("LLM_MODEL", "llama3.2")
+LLM_MODEL = os.environ.get("LLM_MODEL", "nemotron-3-super")
 LLM_API_TYPE = os.environ.get("LLM_API_TYPE", "auto").lower()
 LLM_TIMEOUT_SECONDS = int(os.environ.get("LLM_TIMEOUT_SECONDS", "600"))
 
 DASHBOARD_PASSWORD = os.environ.get("DASHBOARD_PASSWORD", "")
+DASHBOARD_ENABLED = os.environ.get("DASHBOARD_ENABLED", "true").lower() in {"1", "true", "yes"} 
 DASHBOARD_SECRET_KEY = os.environ.get("DASHBOARD_SECRET_KEY", DASHBOARD_PASSWORD or "change-me")
 SYSTEM_PROMPT = os.environ.get(
     "SYSTEM_PROMPT",

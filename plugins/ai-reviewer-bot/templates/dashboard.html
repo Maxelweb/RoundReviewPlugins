@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>AI Reviewer Bot</title>
+  <title>Round Review - AI Reviewer Bot</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
@@ -10,7 +10,7 @@
   {% if login %}
     <form method="post" action="{{ url_for('core.dashboard_login') }}">
         <label for="password">Password</label> 
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
         <button type="submit">Sign in</button>
     </form>
   {% elif unavailable %}
@@ -28,11 +28,11 @@
     <h2>Settings</h2>
     <form method="post">
       <label for="system_prompt">System prompt for Reviews</label>
-      <p class="muted">Change this prompt based on what you want your AI model to review. The document will be passed as context.</p>
+      <p class="muted small">Change this prompt based on what you want your AI model to review. The document will be passed as context.</p>
     {% if system_prompt_saved %}
-        <p class="info"><strong>Note</strong>: the system prompt saved here has priority over <code>SYSTEM_PROMPT</code> environment variable.</p>
+        <p class="info small"><strong>Note</strong>: the system prompt saved here has priority over <code>SYSTEM_PROMPT</code> environment variable.</p>
     {% endif %}
-      <textarea id="system_prompt" name="system_prompt" required>{{ system_prompt }}</textarea>
+      <textarea id="system_prompt" name="system_prompt" placeholder="Enter system prompt for your AI model like 'You are a helpful assistant that reviews documents ...'" required>{{ system_prompt }}</textarea>
       <button type="submit">Save prompt</button>
     </form>
   {% endif %}
